@@ -27,6 +27,7 @@ export default defineConfig({
         './src/tweening-spring.ts',
         './src/tweening-save-restore.ts',
         './src/presentation.ts',
+        './src/bouncing-ball.ts',
       ],
     }),
   ],
