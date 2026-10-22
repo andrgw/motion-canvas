@@ -18,10 +18,9 @@ repo root.
   `.meta` files.
 - `packages/examples`: scenes shown in the docs. `packages/template`: dev
   sandbox. `packages/e2e`: render snapshot test.
-- Packages use each other's build output (`lib/`, `dist/`,
-  `packages/2d/editor`), not `src/`. Two exceptions: `packages/template` aliases
-  core, 2d, ui and vite-plugin to source, and the docs build their API pages
-  from TSDoc in `core/src` and `2d/src/lib`.
+- Packages use each other's build output, not `src/`. Two exceptions:
+  `packages/template` runs core, 2d, ui, vite-plugin and ffmpeg from source, and
+  the docs build their API pages from TSDoc in `core/src` and `2d/src/lib`.
 
 ## Commands
 
@@ -54,16 +53,16 @@ npm run template:dev                # editor UI work, http://localhost:9000/ (no
   from the start.
 - A new example needs `packages/examples/src/<name>.ts` (`makeProject`,
   importing `./scenes/<name>?scene`), `src/scenes/<name>.tsx`, and an entry in
-  the explicit `project` list in `packages/examples/vite.config.ts`. The first
-  `examples:dev` or `examples:build` creates `src/<name>.meta` and
-  `src/scenes/<name>.meta`. Commit both.
+  the explicit `project` list in `packages/examples/vite.config.ts`. Opening it
+  once in `examples:dev` writes `src/<name>.meta` and `src/scenes/<name>.meta`
+  with the scene's seed. Commit both.
 - Leave commit messages to the user (CONTRIBUTING.md discourages AI-written
   ones). A commit scope, if used, must be listed in `commitlint.config.js`,
   which leaves out `template` and `internal`.
 
-## Gotchas
+## Guardrails
 
-- Don't run `npm run core:test` or `npm run 2d:test`. Vitest starts in watch
+- Don't run `npm run core:test`, `2d:test` or `e2e:test`. Vitest starts in watch
   mode even with `-- --run`, because the inner npm call takes `--run` as its own
   option.
 - `Failed to resolve entry for package "@motion-canvas/core"` in 2d tests means
@@ -83,5 +82,6 @@ npm run template:dev                # editor UI work, http://localhost:9000/ (no
   build output: `lib/`, `dist/`, `packages/2d/editor`,
   `packages/docs/static/{examples,editor,modules}`,
   `packages/docs/src/generated`.
-- Formatting only happens in the pre-commit hook, and CI checks every file. Run
-  `npx prettier --write <files>` on what you add or change.
+- The pre-commit hook formats only some file types, and only on commit, while CI
+  checks every file. Run `npx prettier --write <files>` on what you add or
+  change.
